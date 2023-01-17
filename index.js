@@ -28,6 +28,6 @@ app.get('/test', (req,res)=>{
     res.send('API works');
 });
 
-app.listen(3000, function() {
+app.listen(5000, function() {
     console.log('parse-server-example running on port 443');
 });
