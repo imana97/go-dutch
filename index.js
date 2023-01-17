@@ -3,6 +3,7 @@
 const express = require('express');
 const ParseServer = require('parse-server').ParseServer;
 const app = express();
+const path = require('path');
 
 // const server = new ParseServer({
 //     databaseURI: 'mongodb://localhost:27017/dev', // Connection string for your MongoDB database
@@ -23,6 +24,6 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.listen(1337, function() {
-    console.log('parse-server-example running on port 1337.');
+app.listen(443, function() {
+    console.log('parse-server-example running on port 443');
 });
