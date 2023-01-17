@@ -4,8 +4,8 @@
   "description": "Go dutch let you share costs for events",
   "main": "index.js",
   "engines": {
-    "node": "^18.13.0",
-    "npm": "^8.19.3"
+    "node": "16.x",
+    "npm": "^8.x"
   },
   "scripts": {
     "start": "forever index.js",
