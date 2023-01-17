@@ -1,0 +1,30 @@
+{
+  "name": "go-dutch",
+  "version": "1.0.0",
+  "description": "Go dutch let you share costs for events",
+  "main": "index.js",
+  "scripts": {
+    "start": "forever index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imana97/go-dutch.git"
+  },
+  "keywords": [
+    "event",
+    "share"
+  ],
+  "author": "Iman Far & Bita Sadeghi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/imana97/go-dutch/issues"
+  },
+  "homepage": "https://github.com/imana97/go-dutch#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "forever": "^4.0.3",
+    "parse-dashboard": "^5.0.0",
+    "parse-server": "^5.4.0"
+  }
+}
