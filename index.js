@@ -1,7 +1,7 @@
 // MONGO_URL:  mongodb://go-dutch-mongo-db:a0712d626479355487c95cda64177e4b@dokku-mongo-go-dutch-mongo-db:27017/go_dutch_mongo_db
 
 const express = require('express');
-const ParseServer = require('parse-server').ParseServer;
+// const ParseServer = require('parse-server').ParseServer;
 const app = express();
 const path = require('path');
 
@@ -24,6 +24,10 @@ const path = require('path');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.listen(443, function() {
+app.get('/test', (req,res)=>{
+    res.send('API works');
+});
+
+app.listen(3000, function() {
     console.log('parse-server-example running on port 443');
 });
