@@ -1,33 +1,46 @@
-// MONGO_URL:  mongodb://go-dutch-mongo-db:a0712d626479355487c95cda64177e4b@dokku-mongo-go-dutch-mongo-db:27017/go_dutch_mongo_db
-
 const express = require('express');
-// const ParseServer = require('parse-server').ParseServer;
+const ParseServer = require('parse-server').ParseServer;
 const app = express();
 const path = require('path');
+const ParseDashboard = require('parse-dashboard');
 
-// const server = new ParseServer({
-//     databaseURI: 'mongodb://localhost:27017/dev', // Connection string for your MongoDB database
-//     cloud: './cloud/main.js', // Path to your Cloud Code
-//     appId: 'go-dutch',
-//     masterKey: 'myMasterKey', // Keep this key secret!
-//     fileKey: 'optionalFileKey',
-//     serverURL: 'http://localhost:1337/parse' // Don't forget to change to https if needed
-// });
-//
-// // Start server
-// await server.start();
+const APP_ID = 'go-dutch-app';
 
 
-
-// Serve the Parse API on the /parse URL prefix
-//app.use('/parse', server.app);
-
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.get('/test', (req,res)=>{
-    res.send('API works');
+const api = new ParseServer({
+    databaseURI: process.env['MONGO_URL'],
+    cloud: './cloud/main.js',
+    appId: APP_ID,
+    allowClientClassCreation: false,
+    enforcePrivateUsers: true,
+    directAccess: true,
+    masterKey: process.env['PARSE_MASTER_KEY'],
+    fileKey: process.env['PARSE_FILE_KEY'],
+    serverURL: process.env['PARSE_SERVER_URL']
 });
 
-app.listen(5000, function() {
-    console.log('parse-server-example running on port 443');
+
+const dashboard = new ParseDashboard({
+    "apps": [{
+        "serverURL": process.env['PARSE_SERVER_URL'],
+        "appId": APP_ID,
+        "masterKey": process.env['PARSE_MASTER_KEY'],
+        "appName": "Go Dutch"
+    }],
+    "trustProxy": 1,
+    "users": [{"user": "admin", "pass": process.env['PARSE_DASHBOARD_PASSWORD']}
+    ],
+    "useEncryptedPasswords": false
+}, {allowInsecureHTTP: false});
+
+
+// static files
+app.use(express.static(path.join(__dirname, 'public')));
+// parse server
+app.use('/parse', api);
+// parse dashboard
+app.use('/dashboard', dashboard);
+
+app.listen(process.env['EXPRESS_PORT'], function () {
+    console.log('parse-server-example running on port ' + process.env['EXPRESS_PORT']);
 });

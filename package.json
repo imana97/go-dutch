@@ -4,7 +4,9 @@
   "description": "Go dutch let you share costs for events",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "forever index.js",
+    "serve": "nodemon -r dotenv/config index.js",
+    "dokku-deploy": "./build.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -28,6 +30,7 @@
     "parse-server": "^5.4.0"
   },
   "devDependencies": {
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.20"
   }
 }
