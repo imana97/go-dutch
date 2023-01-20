@@ -1,4 +1,1 @@
-export class UserStore {
-
-
-}
+export class UserStore {}

@@ -1,8 +1,8 @@
 // Import from mobx
-import { action, configure, extendObservable, runInAction } from "mobx";
+import { action, configure, extendObservable, runInAction } from 'mobx';
 
 // Configure mobx strictMode. so any changes to observable must be in actions.
-configure({ enforceActions: "observed" });
+configure({ enforceActions: 'observed' });
 
 /**
  * Main Class
@@ -18,7 +18,7 @@ export class ParseMobx {
    * @private
    */
   private checkDefined(key: string | number, initValue: any) {
-    if (typeof this.attributes[key] === "undefined") {
+    if (typeof this.attributes[key] === 'undefined') {
       const objToExtend: any = {};
 
       objToExtend[key] = initValue;
@@ -45,13 +45,13 @@ export class ParseMobx {
    * @returns {ParseMobx|<ParseMobx>|null}
    */
   static toParseMobx(param: any): any {
-    return typeof param === "function"
+    return typeof param === 'function'
       ? (obj: any) => param(new ParseMobx(obj))
       : Array.isArray(param)
-        ? param.map((obj) => new ParseMobx(obj))
-        : param
-          ? new ParseMobx(param)
-          : null;
+      ? param.map((obj) => new ParseMobx(obj))
+      : param
+      ? new ParseMobx(param)
+      : null;
   }
 
   /**
@@ -60,10 +60,10 @@ export class ParseMobx {
    * @param item
    * @param key
    */
-  static deleteListItem(list: any, item: any, key = "id") {
+  static deleteListItem(list: any, item: any, key = 'id') {
     list.splice(
       list.findIndex((obj: { [x: string]: any }) => obj[key] === item[key]),
-      1
+      1,
     );
   }
 
@@ -73,7 +73,7 @@ export class ParseMobx {
    * @param item
    * @param key
    */
-  static updateListItem(list: any[], item: { [x: string]: any }, key = "id") {
+  static updateListItem(list: any[], item: { [x: string]: any }, key = 'id') {
     list[list.findIndex((obj) => obj[key] === item[key])] = item;
   }
 
@@ -93,7 +93,7 @@ export class ParseMobx {
 
     // copy id
     this.id = obj.id;
-    this.attributes = { createdAt: obj.get("createdAt") };
+    this.attributes = { createdAt: obj.get('createdAt') };
 
     // store props to be observed.
     const observableObject: any = {};
@@ -101,21 +101,21 @@ export class ParseMobx {
     for (let key in obj.attributes) {
       const attribute = obj.attributes[key];
 
-      if (attribute.constructor.name === "ParseObjectSubclass") {
+      if (attribute.constructor.name === 'ParseObjectSubclass') {
         this.attributes[key] = new ParseMobx(attribute);
       } else if (Array.isArray(attribute)) {
         observableObject[key] = attribute.map((el) =>
-          el.constructor.name === "ParseObjectSubclass"
+          el.constructor.name === 'ParseObjectSubclass'
             ? new ParseMobx(el)
-            : el.constructor.name !== "ParseRelation" &&
-            el.constructor.name !== "ParseACL"
-              ? el
-              : null
+            : el.constructor.name !== 'ParseRelation' &&
+              el.constructor.name !== 'ParseACL'
+            ? el
+            : null,
         );
       } else if (
-        attribute.constructor.name !== "ParseRelation" &&
-        attribute.constructor.name !== "ParseACL" &&
-        key !== "createdAt"
+        attribute.constructor.name !== 'ParseRelation' &&
+        attribute.constructor.name !== 'ParseACL' &&
+        key !== 'createdAt'
       ) {
         observableObject[key] = attribute;
       }
@@ -158,10 +158,10 @@ export class ParseMobx {
   @action
   addAllUnique(attr: string, items: any[]) {
     this.checkDefined(attr, []);
-    if (this.checkType(attr, "Array")) {
+    if (this.checkType(attr, 'Array')) {
       items.forEach((item) => {
         if (this.attributes[attr].indexOf(item) === -1) {
-          item.constructor.name === "ParseObjectSubclass"
+          item.constructor.name === 'ParseObjectSubclass'
             ? this.attributes[attr].push(new ParseMobx(item))
             : this.attributes[attr].push(item);
         }
@@ -181,9 +181,9 @@ export class ParseMobx {
   @action
   addUnique(key: string, value: { constructor: { name: string } }) {
     this.checkDefined(key, []);
-    if (this.checkType(key, "Array")) {
+    if (this.checkType(key, 'Array')) {
       if (this.attributes[key].indexOf(value) === -1) {
-        value.constructor.name === "ParseObjectSubclass"
+        value.constructor.name === 'ParseObjectSubclass'
           ? this.attributes[key].push(new ParseMobx(value))
           : this.attributes[key].push(value);
       }
@@ -326,7 +326,7 @@ export class ParseMobx {
     // set 0 to attr if undefined.
     this.checkDefined(attr, 0);
 
-    if (this.checkType(attr, "Number")) {
+    if (this.checkType(attr, 'Number')) {
       this.attributes[attr] += amount;
     }
     this._parseObj.increment(attr, amount);
@@ -383,7 +383,7 @@ export class ParseMobx {
   remove(key: string, value: any) {
     this.checkDefined(key, []);
 
-    if (this.checkType(key, "Array")) {
+    if (this.checkType(key, 'Array')) {
       if (this.attributes[key].indexOf(value) !== -1) {
         this.attributes[key].splice(this.attributes[key].indexOf(value), 1);
       }
@@ -402,7 +402,7 @@ export class ParseMobx {
   removeAll(attr: string, items: any[]) {
     this.checkDefined(attr, []);
 
-    if (this.checkType(attr, "Array")) {
+    if (this.checkType(attr, 'Array')) {
       items.forEach((item) => {
         if (this.attributes[attr].indexOf(item) !== -1) {
           this.attributes[attr].splice(this.attributes[attr].indexOf(item), 1);
@@ -434,7 +434,7 @@ export class ParseMobx {
         .save(options)
         .then(() => {
           runInAction(() =>
-            this.set("updatedAt", new Date().toISOString(), undefined)
+            this.set('updatedAt', new Date().toISOString(), undefined),
           );
           resolve(this);
         })
@@ -449,7 +449,7 @@ export class ParseMobx {
         .saveEventually(options)
         .then(() => {
           runInAction(() =>
-            this.set("updatedAt", new Date().toISOString(), undefined)
+            this.set('updatedAt', new Date().toISOString(), undefined),
           );
           resolve(this);
         })
@@ -465,15 +465,15 @@ export class ParseMobx {
    */
   @action
   set(key: string, value: string | number | boolean | object, options?: any) {
-    if (value.constructor.name === "ParseRelation") {
-      throw new Error("You can not add relations with set");
+    if (value.constructor.name === 'ParseRelation') {
+      throw new Error('You can not add relations with set');
     }
-    if (value.constructor.name === "ParseACL") {
-      throw new Error("Please use setACL() instead");
+    if (value.constructor.name === 'ParseACL') {
+      throw new Error('Please use setACL() instead');
     }
-    if (typeof this.attributes[key] !== "undefined") {
+    if (typeof this.attributes[key] !== 'undefined') {
       // if it is parse subclass, create parse object.
-      if (value.constructor.name === "ParseObjectSubclass") {
+      if (value.constructor.name === 'ParseObjectSubclass') {
         this.attributes[key] = new ParseMobx(value);
       } else {
         this.attributes[key] = value;

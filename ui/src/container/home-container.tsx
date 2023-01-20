@@ -1,1 +1,1 @@
-export const HomeContainer=()=><>home container</>;
+export const HomeContainer = () => <>home container</>;

@@ -1,9 +1,7 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from 'react-router-dom';
 
-export const LayoutContainer = () =>
-    <>
-        <Outlet />
-    </>
-
-
-
+export const LayoutContainer = () => (
+  <>
+    <Outlet />
+  </>
+);

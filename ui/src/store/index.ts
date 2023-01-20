@@ -1,3 +1,3 @@
-import {UserStore} from "./user-store";
+import { UserStore } from './user-store';
 
-export const userStore= new UserStore();
+export const userStore = new UserStore();
