@@ -15,11 +15,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-        
-      - name: NPM Target
-        uses: anna-money/github-actions-npm@v4
-        with:
-          target: 'build-ui'
 
       - name: Dokku
         uses: dokku/github-action@v1.4.0

@@ -4,7 +4,7 @@
   "description": "Go dutch let you share costs for events",
   "main": "index.js",
   "scripts": {
-    "start": "forever index.js",
+    "start": "npm run build-ui && forever index.js",
     "serve": "nodemon -r dotenv/config index.js",
     "build-ui": "cd ui && npm install && npm run build && cd ..",
     "run-ui": "cd ui && npm start && cd ..",
