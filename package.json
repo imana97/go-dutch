@@ -6,7 +6,8 @@
   "scripts": {
     "start": "forever index.js",
     "serve": "nodemon -r dotenv/config index.js",
-    "dokku-deploy": "./build.sh",
+    "build-ui": "cd ui && npm run build && cd ..",
+    "run-ui": "cd ui && npm start && cd ..",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -35,7 +35,7 @@ const dashboard = new ParseDashboard({
 
 
 // static files
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'ui/build')));
 // parse server
 app.use('/parse', api);
 // parse dashboard
