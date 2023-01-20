@@ -6,7 +6,7 @@
   "scripts": {
     "start": "forever index.js",
     "serve": "nodemon -r dotenv/config index.js",
-    "build-ui": "cd ui && npm run build && cd ..",
+    "build-ui": "cd ui && npm install && npm run build && cd ..",
     "run-ui": "cd ui && npm start && cd ..",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
