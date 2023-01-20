@@ -45,5 +45,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/parse": "^3.0.2",
+    "husky": "^8.0.3",
+    "hygen": "^6.2.11",
+    "prettier": "^2.8.3",
+    "pretty-quick": "^3.1.3"
   }
 }
