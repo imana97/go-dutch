@@ -1,9 +1,7 @@
-import {LoginComponent} from "../component/login-component";
+import { Outlet } from 'react-router-dom';
 
-export const LayoutContainer = () =>
-    <>
-        <LoginComponent />
-    </>
-
-
-
+export const LayoutContainer = () => (
+  <>
+    <Outlet />
+  </>
+);
