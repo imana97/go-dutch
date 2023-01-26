@@ -1,1 +1,7 @@
-export const HomeContainer = () => <>home container</>;
+
+
+export const HomeContainer = () => {
+  return <>Home!</>
+};
+
+
