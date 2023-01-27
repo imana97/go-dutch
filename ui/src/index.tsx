@@ -3,8 +3,15 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { HashRouter } from 'react-router-dom';
+import {HashRouter} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Parse from "parse";
+import {appConfig} from "./config";
+
+
+// initialize parse application
+Parse.initialize(appConfig.parse.appId);
+Parse.serverURL = appConfig.parse.serverURL;
 
 
 const root = ReactDOM.createRoot(
@@ -13,7 +20,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <HashRouter>
-      <App />
+      <App/>
     </HashRouter>
   </React.StrictMode>,
 );

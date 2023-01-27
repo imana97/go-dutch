@@ -1,19 +1,19 @@
-import { Col, Container, Row} from "react-bootstrap";
+import {Col, Container, Row} from "react-bootstrap";
 import {Outlet} from "react-router-dom";
 import {EventComponent} from "../component/event-component";
 
-export const EventsContainer=()=>{
+export const EventGroupContainer = () => {
   return (
-    <Container fluid>
+    <Container>
       <Row>
         <Col>
-          <EventComponent />
+          <EventComponent/>
           {/*<Button variant="info">Primary</Button>{' '}*/}
         </Col>
       </Row>
       <Row>
         <Col>
-          <Outlet />
+          <Outlet/>
         </Col>
       </Row>
     </Container>

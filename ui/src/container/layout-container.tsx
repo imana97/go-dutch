@@ -7,7 +7,6 @@ export const LayoutContainer = () => (
     <Row>
       <Col>
         <HeaderComponent />
-        <Button variant="info">Primary</Button>{' '}
       </Col>
     </Row>
     <Row>
