@@ -1,9 +1,8 @@
 import Container from 'react-bootstrap/Container';
-import {Card} from "react-bootstrap";
+import { Card } from 'react-bootstrap';
 
-export const EventComponent= ()=>{
-  return(
-
+export const EventComponent = () => {
+  return (
     <Container fluid>
       <>
         {[
@@ -27,15 +26,13 @@ export const EventComponent= ()=>{
             <Card.Body>
               <Card.Title>{variant} Card Title </Card.Title>
               <Card.Text>
-                Some quick example text to build on the card title and make up the
-                bulk of the card's content.
+                Some quick example text to build on the card title and make up
+                the bulk of the card's content.
               </Card.Text>
             </Card.Body>
           </Card>
         ))}
       </>
     </Container>
-    );
-
-}
-
+  );
+};

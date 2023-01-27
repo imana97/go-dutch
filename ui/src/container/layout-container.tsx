@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
-import {Button, Col, Container, Row} from "react-bootstrap";
-import {HeaderComponent} from "../component/header-component";
+import { Button, Col, Container, Row } from 'react-bootstrap';
+import { HeaderComponent } from '../component/header-component';
 
 export const LayoutContainer = () => (
   <Container fluid>
@@ -15,6 +15,4 @@ export const LayoutContainer = () => (
       </Col>
     </Row>
   </Container>
-
-
 );
