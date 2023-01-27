@@ -1,37 +1,22 @@
-import {Card,  Container} from "react-bootstrap";
+import { Col, Container, Row} from "react-bootstrap";
+import {Outlet} from "react-router-dom";
+import {EventComponent} from "../component/event-component";
 
 export const EventsContainer=()=>{
   return (
     <Container fluid>
-      <>
-        {[
-          'Primary',
-          'Secondary',
-          'Success',
-          'Danger',
-          'Warning',
-          'Info',
-          'Light',
-          'Dark',
-        ].map((variant) => (
-          <Card
-            bg={variant.toLowerCase()}
-            key={variant}
-            text={variant.toLowerCase() === 'light' ? 'dark' : 'white'}
-            style={{ width: '18rem' }}
-            className="mb-2"
-          >
-            <Card.Header>Event</Card.Header>
-            <Card.Body>
-              <Card.Title>{variant} Card Title </Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title and make up the
-                bulk of the card's content.
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        ))}
-      </>
-</Container>
+      <Row>
+        <Col>
+          <EventComponent />
+          {/*<Button variant="info">Primary</Button>{' '}*/}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Outlet />
+        </Col>
+      </Row>
+    </Container>
+
   )
 };

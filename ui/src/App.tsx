@@ -5,12 +5,14 @@ import {HomeContainer} from './container/home-container';
 import Parse from 'parse';
 import {LayoutContainer} from './container/layout-container';
 import {EventsContainer} from "./container/events-container";
+import {LoginContainer} from './container/login-container';
 
 const App = (props: any) => (
   <Routes>
     <Route path="/" element={<LayoutContainer/>}>
       <Route index element={<HomeContainer/>}/>
       <Route path='/events' element={<EventsContainer />} />
+      <Route path='/login' element={<LoginContainer />}/>
     </Route>
   </Routes>
 );
