@@ -2,10 +2,7 @@ import { useEffect } from 'react';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 
 export const AccessControlContainer = () => {
-
-  useEffect(() => {
-    
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <Container>

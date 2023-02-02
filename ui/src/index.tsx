@@ -1,16 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import 'bootswatch/dist/cosmo/bootstrap.min.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { HashRouter } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Parse from 'parse';
 import { appConfig } from './config';
+import { userStore } from './store';
 
 // initialize parse application
 Parse.initialize(appConfig.parse.appId);
 Parse.serverURL = appConfig.parse.serverURL;
+
+// set if the user is logged in
+userStore.setLoggedInUser(Parse.User.current());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
