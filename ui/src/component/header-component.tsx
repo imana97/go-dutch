@@ -1,0 +1,25 @@
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import moneyLogo from '../asset/money-logo.svg';
+import { UserMenuComponent } from './user-menu-component';
+
+export const HeaderComponent = () => (
+  <Navbar fixed="top" bg="dark" variant="dark" expand="lg">
+    <Container>
+      <Navbar.Brand href="#/">
+        <img src={moneyLogo} alt="Go Dutch" /> Go Dutch
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="me-auto">
+          <Nav.Link href="#/">Home</Nav.Link>
+          <Nav.Link href="#/event-groups">Events group</Nav.Link>
+        </Nav>
+        <Nav className="ml-auto">
+          <UserMenuComponent />
+        </Nav>
+      </Navbar.Collapse>
+    </Container>
+  </Navbar>
+);
