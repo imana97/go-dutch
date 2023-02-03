@@ -1,1 +1,1 @@
-export const NotificationContainer=()=><>Notification container</>;
+export const NotificationContainer = () => <>Notification container</>;
