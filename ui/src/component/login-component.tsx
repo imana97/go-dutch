@@ -2,6 +2,7 @@ import {Alert, Button, Form} from 'react-bootstrap';
 import {userStore} from '../store';
 import {observer} from 'mobx-react';
 import {useNavigate} from "react-router-dom";
+import Parse from "parse";
 
 export const LoginComponent = observer(() => {
 
@@ -68,7 +69,7 @@ export const LoginComponent = observer(() => {
           </Form.Text>
           <br/>
           <Form.Text>
-            <a href="#/reset-password">Forgot my password</a>
+            <a href="#/login" onClick={()=>{console.log('test'); Parse.User.requestPasswordReset('iman.khaghani@gmail.com')}}>Forgot my password</a>
           </Form.Text>
         </Form.Group>
       </Form>
