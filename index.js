@@ -14,45 +14,6 @@ const mailgunDomain = process.env.MAILGUN_DOMAIN;
 
 const filePath = (file) => path.resolve(__dirname, "files/", file);
 
-const mailgunConfig = {
-  // The email address from which emails are sent.
-  sender: "go-duck@tinygo.link",
-  // The email templates.
-  templates: {
-    passwordResetEmail: {
-      subjectPath: filePath("password_reset_email_subject.txt"),
-      textPath: filePath("password_reset_email.txt"),
-      htmlPath: filePath("password_reset_email.html")
-    },
-    verificationEmail: {
-      subjectPath: filePath("verification_email_subject.txt"),
-      textPath: filePath("verification_email.txt"),
-      htmlPath: filePath("verification_email.html")
-    },
-    customEmail: {
-      subjectPath: filePath("custom_email_subject.txt"),
-      textPath: filePath("custom_email.txt"),
-      htmlPath: filePath("custom_email.html"),
-      placeholders: {
-        username: "DefaultUser",
-        appName: "DefaultApp"
-      },
-      extra: {
-        replyTo: "no-reply@example.com"
-      }
-    }
-  },
-  // The asynchronous callback that contains the composed email payload to
-  // be passed on to an 3rd party API and optional meta data. The payload
-  // may need to be converted specifically for the API; conversion for
-  // common APIs is conveniently available in the `ApiPayloadConverter`.
-  // Below is an example for the Mailgun client.
-  apiCallback: async ({ payload }) => {
-    const mailgunPayload = ApiPayloadConverter.mailgun(payload);
-    await mailgunClient.messages.create(mailgunDomain, mailgunPayload);
-  }
-};
-
 
 const APP_ID = "go-dutch-app";
 
@@ -71,7 +32,40 @@ const api = new ParseServer({
   verifyUserEmails: true,
   emailAdapter: {
     module: "parse-server-api-mail-adapter",
-    options: mailgunConfig
+    options: {
+      // The email address from which emails are sent.
+      sender: "go-dutch@tinygo.link",
+      // The email templates.
+      templates: {
+        passwordResetEmail: {
+          subjectPath: filePath("password_reset_email_subject.txt"),
+          textPath: filePath("password_reset_email.txt"),
+          htmlPath: filePath("password_reset_email.html")
+        },
+        verificationEmail: {
+          subjectPath: filePath("verification_email_subject.txt"),
+          textPath: filePath("verification_email.txt"),
+          htmlPath: filePath("verification_email.html")
+        },
+        customEmail: {
+          subjectPath: filePath("custom_email_subject.txt"),
+          textPath: filePath("custom_email.txt"),
+          htmlPath: filePath("custom_email.html"),
+          placeholders: {
+            username: "DefaultUser",
+            appName: "DefaultApp"
+          },
+          extra: {
+            replyTo: "no-reply@example.com"
+          }
+        }
+      },
+
+      apiCallback: async ({ payload }) => {
+        const mailgunPayload = ApiPayloadConverter.mailgun(payload);
+        await mailgunClient.messages.create(mailgunDomain, mailgunPayload);
+      }
+    }
   }
 });
 
