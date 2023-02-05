@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   apps: [
     {
       serverURL: process.env['PARSE_SERVER_URL'],
@@ -8,6 +8,11 @@ module.exports = {
     },
   ],
   trustProxy: 1,
-  users: [{ user: process.env['PARSE_DASHBOARD_USERNAME'], pass: process.env['PARSE_DASHBOARD_PASSWORD'] }],
+  users: [
+    {
+      user: process.env['PARSE_DASHBOARD_USERNAME'],
+      pass: process.env['PARSE_DASHBOARD_PASSWORD'],
+    },
+  ],
   useEncryptedPasswords: false,
 };

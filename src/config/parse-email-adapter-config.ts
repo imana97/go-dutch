@@ -12,9 +12,9 @@ const transporter = nodeMailer.createTransport({
 });
 
 //todo: improve this
-const sendMail = (message) =>
+const sendMail = (message: any) =>
   new Promise((resolve, reject) => {
-    transporter.sendMail(message, (err, info) => {
+    transporter.sendMail(message, (err: any, info: unknown) => {
       if (err) {
         reject(err);
       } else {
@@ -23,9 +23,9 @@ const sendMail = (message) =>
     });
   });
 
-const filePath = (file) => path.resolve(__dirname, '../files/', file);
+const filePath = (file: string) => path.resolve(__dirname, '../files/', file);
 
-module.exports = {
+export default {
   module: 'parse-server-api-mail-adapter',
   options: {
     // The email address from which emails are sent.
@@ -53,7 +53,7 @@ module.exports = {
         extra: {
           replyTo: process.env['SMTP_FROM'],
         },
-        placeholderCallback: async ({ user }) => {
+        placeholderCallback: async ({ user }: any) => {
           return {
             username: user.get('username'),
             name: user.get('name') || 'Unknown',
@@ -61,7 +61,7 @@ module.exports = {
         },
       },
     },
-    apiCallback: async ({ payload }) => {
+    apiCallback: async ({ payload }: any) => {
       await sendMail(payload);
     },
   },
