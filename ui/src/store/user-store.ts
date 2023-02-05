@@ -1,6 +1,6 @@
-import {makeObservable, observable, action, runInAction} from 'mobx';
+import { makeObservable, observable, action, runInAction } from 'mobx';
 import Parse from 'parse';
-import {ParseMobx} from '../lib/parse-mobx';
+import { ParseMobx } from '../lib/parse-mobx';
 
 export class UserStore {
   constructor() {
@@ -64,11 +64,7 @@ export class UserStore {
   }
 
   @action
-  async signUp(
-    name: string,
-    email: string,
-    password: string
-  ) {
+  async signUp(name: string, email: string, password: string) {
     this.loading = true;
 
     const user = new Parse.User();
@@ -115,7 +111,6 @@ export class UserStore {
       });
 
       throw error;
-
     }
   }
 }

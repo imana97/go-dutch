@@ -1,1 +1,1 @@
-export const AccountContainer=()=><>account container</>;
+export const AccountContainer = () => <>account container</>;

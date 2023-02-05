@@ -1,19 +1,21 @@
-import {Alert, Button, Form} from 'react-bootstrap';
-import {userStore} from '../store';
-import {observer} from 'mobx-react';
-import {useNavigate} from "react-router-dom";
+import { Alert, Button, Form } from 'react-bootstrap';
+import { userStore } from '../store';
+import { observer } from 'mobx-react';
+import { useNavigate } from 'react-router-dom';
+import Parse from 'parse';
 
 export const LoginComponent = observer(() => {
-
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    userStore.login(userStore.email, userStore.password)
-      .then(user => {
+    userStore
+      .login(userStore.email, userStore.password)
+      .then((user) => {
         userStore.clearSignUpForm();
-        navigate('/', {replace: true})
-      }).catch();
-  }
+        navigate('/', { replace: true });
+      })
+      .catch();
+  };
 
   return (
     <>
@@ -53,22 +55,26 @@ export const LoginComponent = observer(() => {
           />
         </Form.Group>
 
-        <Button
-          variant="primary"
-          type="button"
-          onClick={() => handleLogin()}
-        >
+        <Button variant="primary" type="button" onClick={() => handleLogin()}>
           Login
         </Button>
 
         <Form.Group>
-          <hr/>
+          <hr />
           <Form.Text>
             Don't have an account? <a href="#/sign-up">Create an account</a>
           </Form.Text>
-          <br/>
+          <br />
           <Form.Text>
-            <a href="#/reset-password">Forgot my password</a>
+            <a
+              href="#/login"
+              onClick={() => {
+                console.log('test');
+                Parse.User.requestPasswordReset('iman.khaghani@gmail.com');
+              }}
+            >
+              Forgot my password
+            </a>
           </Form.Text>
         </Form.Group>
       </Form>

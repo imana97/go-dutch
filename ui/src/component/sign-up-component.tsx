@@ -13,11 +13,7 @@ export const SignUpComponent = observer(() => {
 
     if (form.checkValidity() === true) {
       userStore
-        .signUp(
-          userStore.name,
-          userStore.email,
-          userStore.password
-        )
+        .signUp(userStore.name, userStore.email, userStore.password)
         .then((user) => {
           // clear the form
           userStore.clearSignUpForm();
@@ -26,7 +22,8 @@ export const SignUpComponent = observer(() => {
 
           // redirect the user to the home page
           navigate('/', { replace: true });
-        }).catch();
+        })
+        .catch();
     }
     // show errors if any.
     userStore.setSignUpValidated(true);
