@@ -5,7 +5,7 @@ const cloudCodeExtensionResolver = () => {
   return path.extname(path.basename(__filename));
 };
 
-module.exports = {
+export default {
   appName: process.env['PARSE_APP_NAME'],
   databaseURI: process.env['MONGO_URL'],
   cloud: path.join(__dirname, '../cloud/main' + cloudCodeExtensionResolver()),
