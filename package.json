@@ -8,7 +8,7 @@
     "start-local": "node -r dotenv/config dist/index.js",
     "serve": "nodemon -r dotenv/config src/index.ts",
     "build-run-js": "npm run build && node -r dotenv/config dist/index.js",
-    "build": "tsc && cd ui && npm install && npm run build && cd .. && rm -rf dist/public && mkdir dist/public && cp -r ui/build/* dist/public",
+    "build": "rm -rf dist && tsc && cd ui && npm install && npm run build && cd .. && mkdir dist/public && cp -r ui/build/* dist/public && cp -r src/files dist/files",
     "run-ui": "cd ui && npm start && cd ..",
     "test": "echo \"Error: no test specified\" && exit 1",
     "setup-husky": "husky install",
