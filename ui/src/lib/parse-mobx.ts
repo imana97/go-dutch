@@ -1,5 +1,6 @@
 // Import from mobx
 import { action, configure, extendObservable, runInAction } from 'mobx';
+import Parse from 'parse';
 
 // Configure mobx strictMode. so any changes to observable must be in actions.
 configure({ enforceActions: 'observed' });
@@ -9,79 +10,14 @@ configure({ enforceActions: 'observed' });
  */
 export class ParseMobx {
   private readonly attributes: any;
-  private readonly _parseObj: any;
-
-  /**
-   *
-   * @param key
-   * @param value
-   * @private
-   */
-  private checkDefined(key: string | number, initValue: any) {
-    if (typeof this.attributes[key] === 'undefined') {
-      const objToExtend: any = {};
-
-      objToExtend[key] = initValue;
-      extendObservable(this.attributes, objToExtend);
-    }
-  }
-
-  /**
-   *
-   * @param key
-   * @param type
-   * @private
-   */
-  private checkType(key: string, type: string) {
-    return this.attributes[key].constructor.name === type;
-  }
-
-  private id: string;
-
-  /**
-   * Convert a ParseObject or array of ParseObjects to ParseMobx object or array of ParseMobx objects.
-   * @static
-   * @param param
-   * @returns {ParseMobx|<ParseMobx>|null}
-   */
-  static toParseMobx(param: any): any {
-    return typeof param === 'function'
-      ? (obj: any) => param(new ParseMobx(obj))
-      : Array.isArray(param)
-      ? param.map((obj) => new ParseMobx(obj))
-      : param
-      ? new ParseMobx(param)
-      : null;
-  }
-
-  /**
-   *
-   * @param list
-   * @param item
-   * @param key
-   */
-  static deleteListItem(list: any, item: any, key = 'id') {
-    list.splice(
-      list.findIndex((obj: { [x: string]: any }) => obj[key] === item[key]),
-      1,
-    );
-  }
-
-  /**
-   *
-   * @param list
-   * @param item
-   * @param key
-   */
-  static updateListItem(list: any[], item: { [x: string]: any }, key = 'id') {
-    list[list.findIndex((obj) => obj[key] === item[key])] = item;
-  }
+  private readonly parseObj: any;
+  private readonly id: string;
 
   /**
    *
    * @param {ParseObject} obj The parse object.
    */
-  constructor(obj: any) {
+  constructor(obj: Parse.Object) {
     // make sure objects are saved.
     if (obj.isNew()) {
       throw new Error(`Only Saved Parse objects can be converted to ParseMobx objects.
@@ -89,7 +25,7 @@ export class ParseMobx {
     }
 
     // keep a ref of parse object.
-    this._parseObj = obj;
+    this.parseObj = obj;
 
     // copy id
     this.id = obj.id;
@@ -125,26 +61,68 @@ export class ParseMobx {
   }
 
   /**
-   * todo: update Model
+   * Convert a ParseObject or array of ParseObjects to ParseMobx object or array of ParseMobx objects.
+   * @static
+   * @param param
+   * @returns {ParseMobx|<ParseMobx>|null}
+   */
+  static toParseMobx(param: Parse.Object | Parse.Object[] | Function): any {
+    return typeof param === 'function'
+      ? (obj: Parse.Object) => param(new ParseMobx(obj))
+      : Array.isArray(param)
+      ? param.map((obj: Parse.Object) => new ParseMobx(obj))
+      : param
+      ? new ParseMobx(param)
+      : null;
+  }
+
+  /**
+   *
+   * @param list
+   * @param item
+   */
+  static deleteListItemById(list: ParseMobx[], item: ParseMobx) {
+    list.splice(
+      list.findIndex((obj: ParseMobx) => obj.getId() === item.getId()),
+      1,
+    );
+  }
+
+  /**
+   *
+   * @param list
+   * @param item
+   */
+  static updateListItem(list: ParseMobx[], item: ParseMobx) {
+    list[list.findIndex((obj: ParseMobx) => obj.getId() === item.getId())] =
+      item;
+  }
+
+  /**
    * Atomically add an object to the end of the array associated with a given key.
    * @param attr
    * @param item
    * @returns {ParseMobx}
    */
-  add(attr: any, item: any) {
-    this._parseObj.add(attr, item);
+  @action
+  add(attr: string, item: any): this {
+    this.checkDefined(attr, []);
+    this.parseObj.add(attr, item);
+    this.attributes[attr].push(item);
     return this;
   }
 
   /**
-   * todo: update Model
    * Atomically add the objects to the end of the array associated with a given key.
    * @param attr
    * @param item
    * @returns {ParseMobx}
    */
-  addAll(attr: any, item: any) {
-    this._parseObj.addAll(attr, item);
+  @action
+  addAll(attr: string, items: any[]): this {
+    this.checkDefined(attr, []);
+    this.parseObj.addAll(attr, items);
+    this.attributes[attr] = this.attributes[attr].concat(items);
     return this;
   }
 
@@ -156,7 +134,7 @@ export class ParseMobx {
    * @returns {ParseMobx}
    */
   @action
-  addAllUnique(attr: string, items: any[]) {
+  addAllUnique(attr: string, items: any[]): this {
     this.checkDefined(attr, []);
     if (this.checkType(attr, 'Array')) {
       items.forEach((item) => {
@@ -167,7 +145,7 @@ export class ParseMobx {
         }
       });
     }
-    this._parseObj.addAllUnique(attr, items);
+    this.parseObj.addAllUnique(attr, items);
     return this;
   }
 
@@ -179,7 +157,7 @@ export class ParseMobx {
    * @returns {ParseMobx}
    */
   @action
-  addUnique(key: string, value: { constructor: { name: string } }) {
+  addUnique(key: string, value: any) {
     this.checkDefined(key, []);
     if (this.checkType(key, 'Array')) {
       if (this.attributes[key].indexOf(value) === -1) {
@@ -188,30 +166,40 @@ export class ParseMobx {
           : this.attributes[key].push(value);
       }
     }
-    this._parseObj.addUnique(key, value);
+    this.parseObj.addUnique(key, value);
     return this;
   }
 
   /**
-   *
+   * Clear
    */
   clear() {
-    return this._parseObj.clear();
+    return this.parseObj.clear();
+  }
+
+  /**
+   * Clone
+   */
+  clone(): ParseMobx {
+    return new ParseMobx(this.parseObj.clone());
   }
 
   /**
    *
+   * @param options
    */
-  clone() {
-    return this._parseObj.clone();
+  destroy(options?: Parse.Object.DestroyOptions | undefined): Promise<this> {
+    return this.parseObj.destroy(options);
   }
 
   /**
    *
-   * @returns {Promise<*>}
+   * @param options
    */
-  destroy(options: any) {
-    this._parseObj.destroy(options);
+  destroyEventually(
+    options?: Parse.Object.DestroyOptions | undefined,
+  ): Promise<this> {
+    return this.parseObj.destroyEventually(options);
   }
 
   /**
@@ -219,16 +207,16 @@ export class ParseMobx {
    * @param attr
    * @returns {*|Boolean}
    */
-  dirty(attr: any) {
-    return this._parseObj.dirty(attr);
+  dirty(attr?: string | undefined): boolean {
+    return this.parseObj.dirty(attr);
   }
 
   /**
    *
    * @returns {*|String[]}
    */
-  dirtyKeys() {
-    return this._parseObj.dirtyKeys();
+  dirtyKeys(): string[] {
+    return this.parseObj.dirtyKeys();
   }
 
   /**
@@ -236,8 +224,8 @@ export class ParseMobx {
    * @param other
    * @returns {*}
    */
-  equals(other: any) {
-    return this._parseObj.equals(other);
+  equals<T extends Parse.Object<Parse.Attributes>>(other: T): boolean {
+    return this.parseObj.equals(other);
   }
 
   /**
@@ -245,16 +233,24 @@ export class ParseMobx {
    * @param attr
    * @returns {*|string|void}
    */
-  escape(attr: any) {
-    return this._parseObj.escape(attr);
+  escape(attr: string): string {
+    return this.parseObj.escape(attr);
   }
 
   /**
    *
    * @returns {*|Boolean}
    */
-  existed() {
-    return this._parseObj.existed();
+  existed(): boolean {
+    return this.parseObj.existed();
+  }
+
+  /**
+   *
+   * @param options
+   */
+  exists(options?: Parse.RequestOptions | undefined): Promise<boolean> {
+    return this.parseObj.exists(options);
   }
 
   /**
@@ -262,13 +258,20 @@ export class ParseMobx {
    * @param options
    * @returns {Promise<ParseMobx>}
    */
-  fetch(options: any) {
+  fetch(options?: Parse.Object.FetchOptions | undefined): Promise<this> {
     return new Promise((resolve, reject) => {
-      this._parseObj
+      this.parseObj
         .fetch(options)
-        .then((newParseObj: any) => new ParseMobx(newParseObj))
+        .then((newParseObj: Parse.Object) => new ParseMobx(newParseObj))
         .catch(reject);
     });
+  }
+
+  /**
+   *
+   */
+  fetchFromLocalDatastore(): Promise<this> {
+    return this.parseObj.fetchFromLocalDatastore();
   }
 
   /**
@@ -277,11 +280,14 @@ export class ParseMobx {
    * @param options
    * @returns {Promise<ParseMobx>}
    */
-  fetchWithInclude(keys: any, options: any) {
+  fetchWithInclude<K extends string>(
+    keys: K | (K | K[])[],
+    options?: Parse.RequestOptions | undefined,
+  ): Promise<this> {
     return new Promise((resolve, reject) => {
-      this._parseObj
+      this.parseObj
         .fetchWithInclude(keys, options)
-        .then((newParseObj: any) => new ParseMobx(newParseObj))
+        .then((newParseObj: Parse.Object) => new ParseMobx(newParseObj))
         .catch(reject);
     });
   }
@@ -294,6 +300,9 @@ export class ParseMobx {
     return this.attributes[key];
   }
 
+  /**
+   *
+   */
   getId() {
     return this.id;
   }
@@ -302,9 +311,8 @@ export class ParseMobx {
    *
    * @returns {ParseMobx}
    */
-  getACL() {
-    this._parseObj.getACL(arguments);
-    return this;
+  getACL(): Parse.ACL | undefined {
+    return this.parseObj.getACL(arguments);
   }
 
   /**
@@ -312,8 +320,8 @@ export class ParseMobx {
    * @param attr
    * @returns {*}
    */
-  has(attr: any) {
-    return this._parseObj.has(attr);
+  has(attr: string): boolean {
+    return this.parseObj.has(attr);
   }
 
   /**
@@ -322,38 +330,72 @@ export class ParseMobx {
    * @param amount
    */
   @action
-  increment(attr: string, amount = 1) {
+  increment(attr: string, amount?: number | undefined): false | this {
     // set 0 to attr if undefined.
     this.checkDefined(attr, 0);
-
     if (this.checkType(attr, 'Number')) {
-      this.attributes[attr] += amount;
+      this.attributes[attr] += amount || 0;
     }
-    this._parseObj.increment(attr, amount);
+    this.parseObj.increment(attr, amount);
+    return this;
   }
 
   /**
    *
-   * @returns {boolean}
+   * @param attr
+   * @param amount
    */
-  isNew() {
+  decrement(attr: string, amount?: number | undefined): false | this {
+    this.checkDefined(attr, 0);
+    if (this.checkType(attr, 'Number')) {
+      this.attributes[attr] -= amount || 0;
+    }
+    this.parseObj.decrement(attr, amount);
+    return this;
+  }
+
+  /**
+   *
+   */
+  initialize(): void {
+    return this.parseObj.initialize();
+  }
+
+  /**
+   *
+   */
+  isDataAvailable(): boolean {
+    throw new Error('Method not implemented.');
+  }
+
+  /**
+   *
+   */
+  isNew(): boolean {
     return false;
+  }
+
+  /**
+   *
+   */
+  isPinned(): Promise<boolean> {
+    throw new Error('Method not implemented.');
   }
 
   /**
    *
    * @returns {*|Boolean|boolean}
    */
-  isValid() {
-    return this._parseObj.isValid();
+  isValid(): boolean {
+    return this.parseObj.isValid();
   }
 
   /**
    *
    * @returns {*|Parse.Object}
    */
-  newInstance() {
-    return this._parseObj.newInstance();
+  newInstance(): ParseMobx {
+    return new ParseMobx(this.parseObj.newInstance());
   }
 
   /**
@@ -361,16 +403,33 @@ export class ParseMobx {
    * @param attr
    * @returns {*|Parse.Op}
    */
-  op(attr: any) {
-    return this._parseObj.op(attr);
+  op(attr: string) {
+    return this.parseObj.op(attr);
+  }
+
+  /**
+   *
+   */
+  pin(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  /**
+   *
+   * @param name
+   */
+  pinWithName(name: string): Promise<void> {
+    throw new Error('Method not implemented.');
   }
 
   /**
    *
    * @returns {*|Parse.Relation}
    */
-  relation(attr: any) {
-    return this._parseObj.relation(attr);
+  relation<R extends Parse.Object<Parse.Attributes>, K extends string = string>(
+    attr: K,
+  ): Parse.Relation<any, R> {
+    return this.parseObj.relation(attr);
   }
 
   /**
@@ -388,7 +447,7 @@ export class ParseMobx {
         this.attributes[key].splice(this.attributes[key].indexOf(value), 1);
       }
     }
-    this._parseObj.remove(key, value);
+    this.parseObj.remove(key, value);
     return this;
   }
 
@@ -409,7 +468,7 @@ export class ParseMobx {
         }
       });
     }
-    this._parseObj.removeAll(attr, items);
+    this.parseObj.removeAll(attr, items);
     return this;
   }
 
@@ -418,9 +477,9 @@ export class ParseMobx {
    * @returns {ParseMobx}
    */
   @action
-  revert() {
-    this._parseObj.revert();
-    return new ParseMobx(this._parseObj);
+  revert(...keys: string[]): ParseMobx {
+    this.parseObj.revert();
+    return new ParseMobx(this.parseObj);
   }
 
   /**
@@ -428,9 +487,9 @@ export class ParseMobx {
    * @returns {Promise<void>}
    */
   @action
-  save(options?: any) {
+  save(options?: Parse.Object.SaveOptions) {
     return new Promise((resolve, reject) => {
-      this._parseObj
+      this.parseObj
         .save(options)
         .then(() => {
           runInAction(() =>
@@ -442,10 +501,16 @@ export class ParseMobx {
     });
   }
 
+  /**
+   *
+   * @param options
+   */
   @action
-  saveEventually(options: any) {
+  saveEventually(
+    options?: Parse.Object.SaveOptions | undefined,
+  ): Promise<this> {
     return new Promise((resolve, reject) => {
-      this._parseObj
+      this.parseObj
         .saveEventually(options)
         .then(() => {
           runInAction(() =>
@@ -464,7 +529,7 @@ export class ParseMobx {
    * @param options
    */
   @action
-  set(key: string, value: string | number | boolean | object, options?: any) {
+  set(key: string, value: any, options?: Parse.Object.SetOptions) {
     if (value.constructor.name === 'ParseRelation') {
       throw new Error('You can not add relations with set');
     }
@@ -484,7 +549,7 @@ export class ParseMobx {
       objToExtend[key] = value;
       extendObservable(this.attributes, objToExtend);
     }
-    this._parseObj.set(key, value, options);
+    this.parseObj.set(key, value, options);
     return this;
   }
 
@@ -492,8 +557,11 @@ export class ParseMobx {
    *
    * @returns {ParseMobx}
    */
-  setACL(acl: any, options?: any) {
-    this._parseObj.setACL(acl, options);
+  setACL(
+    acl: Parse.ACL,
+    options?: Parse.SuccessFailureOptions | undefined,
+  ): false | this {
+    this.parseObj.setACL(acl, options);
     return this;
   }
 
@@ -501,25 +569,44 @@ export class ParseMobx {
    *
    * @returns {*}
    */
-  toJSON() {
-    return this._parseObj.toJSON();
+  toJSON(): Parse.Object.ToJSON<Parse.Attributes> & Parse.JSONBaseAttributes {
+    return this.parseObj.toJSON();
   }
 
   /**
    *
    * @returns {ParseMobx}
    */
-  toPointer() {
-    return this;
+  toPointer(): Parse.Pointer {
+    return this.parseObj.toPointer();
   }
 
   /**
-   * todo: update model?
-   * @param attr
+   *
    */
-  unset(attr: any) {
-    this._parseObj.unset(attr);
-    return new ParseMobx(this._parseObj);
+  unPin(): Promise<void> {
+    return this.parseObj.unPin();
+  }
+
+  /**
+   *
+   * @param name
+   */
+  unPinWithName(name: string): Promise<void> {
+    return this.parseObj.unPinWithName(name);
+  }
+
+  /**
+   *
+   * @param attr
+   * @param options
+   */
+  unset(attr: string, options?: any): this {
+    this.parseObj.unset(attr, options);
+    if (this.attributes[attr]) {
+      delete this.attributes[attr];
+    }
+    return this;
   }
 
   /**
@@ -527,15 +614,42 @@ export class ParseMobx {
    * @param attrs
    * @returns {*|boolean|_ParseError.default|void|string|ActiveX.IXMLDOMParseError}
    */
-  validate(attrs: any) {
-    return this._parseObj.validate(attrs);
+  validate(
+    attrs: Parse.Attributes,
+    options?: Parse.SuccessFailureOptions | undefined,
+  ): false | Parse.Error {
+    return this.parseObj.validate(attrs, options);
   }
 
   /**
    *
    * @returns {ParseObject}
    */
-  getParseObject() {
-    return this._parseObj;
+  getParseObject(): Parse.Object {
+    return this.parseObj;
+  }
+
+  /**
+   *
+   * @param key
+   * @param value
+   * @private
+   */
+  private checkDefined(key: string, initValue: any): void {
+    if (typeof this.attributes[key] === 'undefined') {
+      const objToExtend: any = {};
+      objToExtend[key] = initValue;
+      extendObservable(this.attributes, objToExtend);
+    }
+  }
+
+  /**
+   *
+   * @param key
+   * @param type
+   * @private
+   */
+  private checkType(key: string, type: string): boolean {
+    return this.attributes[key].constructor.name === type;
   }
 }
