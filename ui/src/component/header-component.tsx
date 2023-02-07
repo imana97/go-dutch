@@ -5,7 +5,7 @@ import moneyLogo from '../asset/money-logo.svg';
 import { UserMenuComponent } from './user-menu-component';
 
 export const HeaderComponent = () => (
-  <Navbar fixed="top" bg="dark" variant="dark" expand="lg">
+  <Navbar fixed="top" bg="dark" variant="dark" expand="md">
     <Container>
       <Navbar.Brand href="#/">
         <img src={moneyLogo} alt="Go Dutch" /> Go Dutch

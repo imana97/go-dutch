@@ -1,6 +1,6 @@
 import { makeObservable, observable, action, runInAction } from 'mobx';
 import Parse from 'parse';
-import { ParseMobx } from '../lib/parse-mobx';
+import ParseMobx from 'parse-mobx';
 
 export class UserStore {
   constructor() {
