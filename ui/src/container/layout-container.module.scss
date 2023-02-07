@@ -3,6 +3,12 @@
 
   .contentContainer {
     padding-top: 72px;
-    min-height: 100%;
+    padding-bottom: 16px;
+    min-height: calc(100% - 100px);
+  }
+
+  .footerContainer {
+    background-color: #eeeeee;
+    height: 100px;
   }
 }

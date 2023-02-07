@@ -1,5 +1,3 @@
-
-
 const express = require('express');
 const ParseServer = require('parse-server').ParseServer;
 const app = express();
@@ -7,8 +5,8 @@ import path from 'path';
 
 const ParseDashboard = require('parse-dashboard');
 import { createServer } from 'http';
-import parseServerConfig from "./config/parse-server-config";
-import parseDashboardConfig from "./config/parse-dashboard-config";
+import parseServerConfig from './config/parse-server-config';
+import parseDashboardConfig from './config/parse-dashboard-config';
 
 const api = new ParseServer(parseServerConfig);
 const dashboard = new ParseDashboard(parseDashboardConfig, {
