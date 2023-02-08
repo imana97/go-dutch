@@ -16,6 +16,26 @@ export class UserStore {
   @observable loading: boolean = false;
   @observable signUpValidated: boolean = false;
 
+
+  @action
+  async resetPassword(){
+    const email = prompt(
+      'Enter your email to receive password reset instruction',
+    );
+    if (email) {
+      try {
+        await Parse.User.requestPasswordReset(email);
+        alert(
+          'Please check your email for password reset instructions.',
+        );
+      } catch (error) {
+        alert(
+          'Error in sending password reset instruction to your email.',
+        );
+      }
+    }
+  }
+
   @action
   setLoggedInUser(user: Parse.User<Parse.Attributes> | undefined) {
     if (user) {
