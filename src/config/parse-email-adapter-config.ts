@@ -23,7 +23,7 @@ const sendMail = (message: any) =>
     });
   });
 
-const filePath = (file: string) => path.resolve(__dirname, '../files/', file);
+const filePath = (file: string) => path.resolve(__dirname, '../file/', file);
 
 export default {
   module: 'parse-server-api-mail-adapter',
