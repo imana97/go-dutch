@@ -66,28 +66,7 @@ export const LoginComponent = observer(() => {
           </Form.Text>
           <br />
           <Form.Text>
-            <a
-              href="#/login"
-              onClick={async () => {
-                const email = prompt(
-                  'Enter your email to receive password reset instruction',
-                );
-                if (email) {
-                  try {
-                    await Parse.User.requestPasswordReset(email);
-                    alert(
-                      'Please check your email for password reset instructions.',
-                    );
-                  } catch (error) {
-                    alert(
-                      'Error in sending password reset instruction to your email.',
-                    );
-                  }
-                }
-              }}
-            >
-              Forgot my password
-            </a>
+            <a href="#/password-reset">Forgot my password</a>
           </Form.Text>
         </Form.Group>
       </Form>

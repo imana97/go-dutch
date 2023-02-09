@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { HomeContainer } from './container/home-container';
 import Parse from 'parse';
 import { LayoutContainer } from './container/layout-container';
@@ -10,12 +10,15 @@ import { SignUpContainer } from './container/sign-up-container';
 import { LogoutContainer } from './container/logout-container';
 import { AccountContainer } from './container/account-container';
 import { NotificationContainer } from './container/notification-container';
+import { PasswordResetContainer } from './container/password-reset-container';
+import { PageNotFoundContainer } from './container/page-not-found-container';
 
 const App = (props: any) => (
   <Routes>
     <Route path="/" element={<LayoutContainer />}>
       <Route index element={<HomeContainer />} />
       <Route path="/event-groups" element={<EventGroupContainer />} />
+
       {/* don't allow logged-in users to open sign up */}
       <Route
         path="/sign-up"
@@ -32,6 +35,15 @@ const App = (props: any) => (
         element={
           <Unauthenticated>
             <LoginContainer />
+          </Unauthenticated>
+        }
+      />
+
+      <Route
+        path="/password-reset"
+        element={
+          <Unauthenticated>
+            <PasswordResetContainer />
           </Unauthenticated>
         }
       />
@@ -75,6 +87,9 @@ const App = (props: any) => (
           </Authenticated>
         }
       />
+
+      {/* all other locations */}
+      <Route path="/*" element={<PageNotFoundContainer />} />
     </Route>
   </Routes>
 );

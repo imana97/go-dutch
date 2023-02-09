@@ -1,4 +1,4 @@
-import { action, makeObservable, observable, runInAction } from 'mobx';
+import { makeObservable, observable, action, runInAction } from 'mobx';
 import Parse from 'parse';
 import ParseMobx from 'parse-mobx';
 import { appConfig } from '../config';
@@ -67,6 +67,21 @@ export class UserStore {
     )}&response_type=${appConfig.splitwise.responseType}&scope=${
       appConfig.splitwise.scope
     }$state=${appConfig.splitwise.state}`;
+  }
+
+  @action
+  async resetPassword() {
+    const email = prompt(
+      'Enter your email to receive password reset instruction',
+    );
+    if (email) {
+      try {
+        await Parse.User.requestPasswordReset(email);
+        alert('Please check your email for password reset instructions.');
+      } catch (error) {
+        alert('Error in sending password reset instruction to your email.');
+      }
+    }
   }
 
   @action
