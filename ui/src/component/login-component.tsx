@@ -66,11 +66,7 @@ export const LoginComponent = observer(() => {
           </Form.Text>
           <br />
           <Form.Text>
-            <a
-              href="#/password-reset"
-            >
-              Forgot my password
-            </a>
+            <a href="#/password-reset">Forgot my password</a>
           </Form.Text>
         </Form.Group>
       </Form>

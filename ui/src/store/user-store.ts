@@ -69,22 +69,17 @@ export class UserStore {
     }$state=${appConfig.splitwise.state}`;
   }
 
-
   @action
-  async resetPassword(){
+  async resetPassword() {
     const email = prompt(
       'Enter your email to receive password reset instruction',
     );
     if (email) {
       try {
         await Parse.User.requestPasswordReset(email);
-        alert(
-          'Please check your email for password reset instructions.',
-        );
+        alert('Please check your email for password reset instructions.');
       } catch (error) {
-        alert(
-          'Error in sending password reset instruction to your email.',
-        );
+        alert('Error in sending password reset instruction to your email.');
       }
     }
   }
