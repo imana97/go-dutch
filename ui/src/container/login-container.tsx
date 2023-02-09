@@ -1,5 +1,5 @@
 import { Card, Col, Container, Row } from 'react-bootstrap';
-import { LoginComponent } from '../component/login-component';
+import { SplitwiseLoginComponent } from '../component/splitwise-login-component';
 
 export const LoginContainer = () => (
   <Container className="h-100">
@@ -8,7 +8,8 @@ export const LoginContainer = () => (
         <Card>
           <Card.Header>Login</Card.Header>
           <Card.Body>
-            <LoginComponent />
+            {/*<LoginComponent />*/}
+            <SplitwiseLoginComponent />
           </Card.Body>
         </Card>
       </Col>

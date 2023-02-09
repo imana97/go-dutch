@@ -15,6 +15,9 @@ Parse.serverURL = appConfig.parse.serverURL;
 // set if the user is logged in
 userStore.setLoggedInUser(Parse.User.current());
 
+// This function handles splitwise oauth2. if token available in the hash, will log in or signup the user.
+userStore.handleSplitwiseAuth().then();
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );

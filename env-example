@@ -13,3 +13,11 @@ SMTP_PORT=<>
 SMTP_USERNAME=<>
 SMTP_PASSWORD=<>
 SMTP_FROM=<>
+
+SPLITWISE_CONSUMER_KEY=<>
+SPLITWISE_CONSUMER_SECRET=...
+SPLITWISE_OAUTH1_REQUEST_TOKEN_URL=https://secure.splitwise.com/oauth/request_token
+SPLITWISE_OAUTH1_ACCESS_TOKEN_URL=https://secure.splitwise.com/oauth/access_token
+SPLITWISE_OAUTH1_AUTHORIZE_URL=https://secure.splitwise.com/oauth/authorize
+SPLITWISE_OAUTH2_TOKEN_URL=https://secure.splitwise.com/oauth/token
+SPLITWISE_OAUTH2_AUTHORIZE_URL=https://secure.splitwise.com/oauth/authorize

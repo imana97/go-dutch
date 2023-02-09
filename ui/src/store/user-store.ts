@@ -1,6 +1,7 @@
-import { makeObservable, observable, action, runInAction } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 import Parse from 'parse';
 import ParseMobx from 'parse-mobx';
+import { appConfig } from '../config';
 
 export class UserStore {
   constructor() {
@@ -15,6 +16,58 @@ export class UserStore {
   @observable loggedInUser: ParseMobx | null = null;
   @observable loading: boolean = false;
   @observable signUpValidated: boolean = false;
+
+  async handleSplitwiseAuth() {
+    if (window.location.hash.match(/#access_token/)) {
+      try {
+        const hash: string = window.location.hash;
+        const token: string = hash.split('=')[1].split('&')[0];
+        await this.loginWithSplitwise(token);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
+  private async fetchSplitwiseUser(token: string) {
+    const response = await Parse.Cloud.run('sw-current-user', { token });
+    return JSON.parse(response);
+  }
+
+  @action
+  private async loginWithSplitwise(token: string) {
+    const swUser = await this.fetchSplitwiseUser(token);
+    await Parse.User.logInWith('splitwise', {
+      authData: {
+        id: swUser.user.id,
+        access_token: token,
+      },
+    });
+    const user = Parse.User.current();
+    if (user && !user.get('email')) {
+      // set other fields
+      user.set('email', swUser.user.email);
+      user.set('name', swUser.user.first_name || '');
+      user.set('about', '');
+      await user.save();
+      runInAction(() => {
+        this.loggedInUser = new ParseMobx(user);
+        window.location.href = '#/';
+      });
+    }
+  }
+
+  async redirectToSplitwise() {
+    window.location.href = `${
+      appConfig.splitwise.host
+    }/oauth/authorize?client_id=${
+      appConfig.splitwise.clientId
+    }&redirect_uri=${encodeURIComponent(
+      appConfig.splitwise.redirectURI,
+    )}&response_type=${appConfig.splitwise.responseType}&scope=${
+      appConfig.splitwise.scope
+    }$state=${appConfig.splitwise.state}`;
+  }
 
   @action
   setLoggedInUser(user: Parse.User<Parse.Attributes> | undefined) {
@@ -87,7 +140,6 @@ export class UserStore {
         this.loading = false;
         this.errorMessage = error.message;
       });
-
       throw error;
     }
   }
@@ -95,21 +147,17 @@ export class UserStore {
   @action
   async login(email: string, password: string) {
     this.errorMessage = '';
-
     try {
       const user = await Parse.User.logIn(email, password);
       runInAction(() => {
         this.loggedInUser = new ParseMobx(user);
       });
-
       return user;
-
       // user is logged in
     } catch (error: any) {
       runInAction(() => {
         this.errorMessage = error.message;
       });
-
       throw error;
     }
   }
