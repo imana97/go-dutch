@@ -9,7 +9,7 @@ export const appConfig = {
   splitwise: {
     host: 'https://secure.splitwise.com',
     clientId: 'Gtoa6OVYC2MuX3w7l86EEvwdsDkIxxGsFFNhGksh',
-    redirectURI: 'http://localhost:3000/#login',
+    redirectURI: window.location.href,
     responseType: 'token', // try bearer
     scope: '',
     state: randomString(32),
