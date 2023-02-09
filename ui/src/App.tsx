@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { HomeContainer } from './container/home-container';
 import Parse from 'parse';
 import { LayoutContainer } from './container/layout-container';
@@ -16,7 +16,6 @@ const App = (props: any) => (
     <Route path="/" element={<LayoutContainer />}>
       <Route index element={<HomeContainer />} />
       <Route path="/event-groups" element={<EventGroupContainer />} />
-
       {/* don't allow logged-in users to open sign up */}
       <Route
         path="/sign-up"

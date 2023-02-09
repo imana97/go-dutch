@@ -1,22 +1,21 @@
-import {Button, Col, Form, Image, Row} from 'react-bootstrap';
-import {userStore} from '../store';
-import {observer} from 'mobx-react';
+import { Button, Col, Form, Image, Row } from 'react-bootstrap';
+import { userStore } from '../store';
+import { observer } from 'mobx-react';
 import Parse from 'parse';
-import {debounce} from 'lodash';
+import { debounce } from 'lodash';
 
 const saveChanges = debounce(() => {
   userStore.loggedInUser?.save().then();
 }, 2000);
 
-export const AccountComponent = observer(() =>
-
+export const AccountComponent = observer(() => (
   <Form onSubmit={(e) => e.preventDefault()}>
     <Row className="mb-3">
       <Form.Group as={Col} controlId="formUpdateImageDisplay">
         <Image
           src={
             userStore.loggedInUser &&
-            userStore.loggedInUser.get('picture').url()
+            userStore.loggedInUser.get('picture')?.url()
           }
           rounded
           thumbnail
@@ -59,8 +58,8 @@ export const AccountComponent = observer(() =>
           saveChanges();
         }}
       />
-      <Form.Text>{
-        `${userStore.loggedInUser?.get('name').length}/32`}
+      <Form.Text>
+        {`${userStore.loggedInUser?.get('name')?.length}/32`}
       </Form.Text>
     </Form.Group>
 
@@ -68,7 +67,7 @@ export const AccountComponent = observer(() =>
       <Form.Label>About</Form.Label>
       <Form.Control
         as={'textarea'}
-        style={{maxHeight: '100px', minHeight: '100px'}}
+        style={{ maxHeight: '100px', minHeight: '100px' }}
         placeholder="About me..."
         value={userStore.loggedInUser?.get('about')}
         onChange={(e) => {
@@ -77,35 +76,20 @@ export const AccountComponent = observer(() =>
           saveChanges();
         }}
       />
-      <Form.Text>{
-        `${userStore.loggedInUser?.get('about').length}/300`}
+      <Form.Text>
+        {`${userStore.loggedInUser?.get('about').length}/300`}
       </Form.Text>
     </Form.Group>
 
-    <hr/>
+    <hr />
 
     <Form.Group className="mb-3" controlId="formUpdateEmail">
       <Form.Label>Email address</Form.Label>
       <Form.Control
-        defaultValue={
-          userStore.loggedInUser?.get('email')
-        }
+        defaultValue={userStore.loggedInUser?.get('email')}
         type="email"
         disabled
       />
     </Form.Group>
-
-    <Form.Group className="mb-3" controlId="formUpdatePassword">
-      <Form.Label>Password</Form.Label>
-      <Form.Control type="password" placeholder="Password"/>
-    </Form.Group>
-
-    <Form.Group className="mb-3" controlId="formUpdateConfirmPassword">
-      <Form.Label>Confirm Password</Form.Label>
-      <Form.Control type="password" multiple placeholder="Password"/>
-    </Form.Group>
-
-    <Button variant="primary" type="button">Change Password</Button>
   </Form>
-);
-
+));
