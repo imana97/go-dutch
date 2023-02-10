@@ -1,7 +1,8 @@
-import { Button } from 'react-bootstrap';
+import { Button, Image } from 'react-bootstrap';
 import { userStore } from '../store';
 import { useLocation } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
+import splitWiseLogo from '../asset/splitwise-logo.png';
 
 export const SplitwiseLoginComponent = () => {
   const { hash, search } = useLocation();
@@ -18,7 +19,6 @@ export const SplitwiseLoginComponent = () => {
 
     // this will run once
     if (token && typeof token === 'string' && token.length === 40) {
-      console.log('token exist', token);
       window.location.hash = ''; // clear hash immediately
       // login user
       userStore.loginWithSplitwise(token).then();
@@ -26,8 +26,12 @@ export const SplitwiseLoginComponent = () => {
   }, [token]);
 
   return (
-    <Button onClick={(event) => userStore.redirectToSplitwise()}>
-      Login with Splitwise
+    <Button variant="dark" onClick={(event) => userStore.redirectToSplitwise()}>
+      <Image
+        src={splitWiseLogo}
+        style={{ height: '22px', paddingBottom: '3px' }}
+      ></Image>
+      &nbsp;&nbsp;&nbsp;<strong>Connect with Splitwise</strong>
     </Button>
   );
 };

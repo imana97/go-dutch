@@ -1,7 +1,7 @@
 import { Alert, Button, Form } from 'react-bootstrap';
 import { userStore } from '../store';
 import { observer } from 'mobx-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const SignUpComponent = observer(() => {
   const navigate = useNavigate();
@@ -124,7 +124,7 @@ export const SignUpComponent = observer(() => {
         <Form.Group>
           <hr />
           <Form.Text>
-            Already have an account? <a href="/login">Sign in here</a>
+            Already have an account? <Link to="/login">Sign in here</Link>
           </Form.Text>
           <br />
         </Form.Group>
