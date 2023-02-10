@@ -17,43 +17,38 @@ export class UserStore {
   @observable loading: boolean = false;
   @observable signUpValidated: boolean = false;
 
-  async handleSplitwiseAuth() {
-    if (window.location.hash.match(/#access_token/)) {
-      try {
-        const hash: string = window.location.hash;
-        const token: string = hash.split('=')[1].split('&')[0];
-        await this.loginWithSplitwise(token);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }
-
   private async fetchSplitwiseUser(token: string) {
     const response = await Parse.Cloud.run('sw-current-user', { token });
     return JSON.parse(response);
   }
 
-  @action
-  private async loginWithSplitwise(token: string) {
-    const swUser = await this.fetchSplitwiseUser(token);
-    await Parse.User.logInWith('splitwise', {
-      authData: {
-        id: swUser.user.id,
-        access_token: token,
-      },
-    });
-    const user = Parse.User.current();
-    if (user && !user.get('email')) {
-      // set other fields
-      user.set('email', swUser.user.email);
-      user.set('name', swUser.user.first_name || '');
-      user.set('about', '');
-      await user.save();
-      runInAction(() => {
-        this.loggedInUser = new ParseMobx(user);
-        window.location.href = '#/';
+  async loginWithSplitwise(token: string) {
+    try {
+      const swUser = await this.fetchSplitwiseUser(token);
+      await Parse.User.logInWith('splitwise', {
+        authData: {
+          id: swUser.user.id,
+          access_token: token,
+        },
       });
+      const user = Parse.User.current();
+      if (user) {
+        if (!user.get('email')) {
+          // set other fields
+          user.set('email', swUser.user.email);
+          user.set('name', swUser.user.first_name || 'unknown');
+          user.set('about', "Hi, I'm a new user...");
+          await user.save();
+          window.location.href = '/account';
+        } else {
+          window.location.href = '/';
+        }
+      } else {
+        window.location.href =
+          '/login?error=' + encodeURIComponent('User is not logged in.');
+      }
+    } catch (error: any) {
+      window.location.href = '/login?error=' + error.message;
     }
   }
 

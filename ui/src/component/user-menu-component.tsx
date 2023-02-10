@@ -11,15 +11,15 @@ export const UserMenuComponent = observer(() => {
           title={userStore.loggedInUser.get('name')}
           id="basic-nav-dropdown"
         >
-          <NavDropdown.Item href="#/account">Account</NavDropdown.Item>
-          <NavDropdown.Item href="#/notifications">
+          <NavDropdown.Item href="/account">Account</NavDropdown.Item>
+          <NavDropdown.Item href="/notifications">
             Notifications
           </NavDropdown.Item>
           <NavDropdown.Divider />
-          <NavDropdown.Item href="#/logout">Log out</NavDropdown.Item>
+          <NavDropdown.Item href="/logout">Log out</NavDropdown.Item>
         </NavDropdown>
       ) : (
-        <Nav.Link href="#/login">Login</Nav.Link>
+        <Nav.Link href="/login">Login</Nav.Link>
       )}
     </>
   );

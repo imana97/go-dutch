@@ -62,11 +62,11 @@ export const LoginComponent = observer(() => {
         <Form.Group>
           <hr />
           <Form.Text>
-            Don't have an account? <a href="#/sign-up">Create an account</a>
+            Don't have an account? <a href="/sign-up">Create an account</a>
           </Form.Text>
           <br />
           <Form.Text>
-            <a href="#/password-reset">Forgot my password</a>
+            <a href="/password-reset">Forgot my password</a>
           </Form.Text>
         </Form.Group>
       </Form>

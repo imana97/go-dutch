@@ -124,7 +124,7 @@ export const SignUpComponent = observer(() => {
         <Form.Group>
           <hr />
           <Form.Text>
-            Already have an account? <a href="#/login">Sign in here</a>
+            Already have an account? <a href="/login">Sign in here</a>
           </Form.Text>
           <br />
         </Form.Group>

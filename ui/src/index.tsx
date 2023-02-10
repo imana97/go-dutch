@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import 'bootswatch/dist/cosmo/bootstrap.min.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import Parse from 'parse';
 import { appConfig } from './config';
 import { userStore } from './store';
@@ -15,17 +15,14 @@ Parse.serverURL = appConfig.parse.serverURL;
 // set if the user is logged in
 userStore.setLoggedInUser(Parse.User.current());
 
-// This function handles splitwise oauth2. if token available in the hash, will log in or signup the user.
-userStore.handleSplitwiseAuth().then();
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 root.render(
   <React.StrictMode>
-    <HashRouter>
+    <BrowserRouter>
       <App />
-    </HashRouter>
+    </BrowserRouter>
   </React.StrictMode>,
 );
 
