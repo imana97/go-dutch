@@ -13,12 +13,16 @@ const dashboard = new ParseDashboard(parseDashboardConfig, {
   allowInsecureHTTP: false,
 });
 
-// static files
-app.use(express.static(path.join(__dirname, 'public')));
 // parse server
 app.use('/parse', api);
 // parse dashboard
 app.use('/dashboard', dashboard);
+
+// static files
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('*', (req: any, res: any) => {
+  res.sendFile(path.join(__dirname + '/public/index.html'));
+});
 
 const httpServer = createServer(app);
 httpServer.listen(process.env['EXPRESS_PORT'], () => {
