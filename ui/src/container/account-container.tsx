@@ -5,7 +5,7 @@ export const AccountContainer = () => (
   <Container className="h-100">
     <Row className="justify-content-md-center align-content-md-center h-100">
       <Col md={7}>
-        <Card>
+        <Card bg="light">
           <Card.Header as={'h5'}>Account</Card.Header>
           <Card.Body>
             <AccountComponent />

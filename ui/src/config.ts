@@ -3,13 +3,12 @@ import { randomString } from './tools/common';
 export const appConfig = {
   parse: {
     appId: 'go-dutch-app',
-    serverURL: 'https://godutch.us/parse',
-    //serverURL: 'http://localhost:3001/parse',
+    serverURL: process.env.REACT_APP_PARSE_SERVER_URL || '',
   },
   splitwise: {
     host: 'https://secure.splitwise.com',
-    clientId: 'Gtoa6OVYC2MuX3w7l86EEvwdsDkIxxGsFFNhGksh',
-    redirectURI: window.location.href,
+    clientId: process.env.REACT_APP_SPLITWISE_CONSUMER_KEY || '',
+    redirectURI: process.env.REACT_APP_SPLITWISE_REDIRECT_URI || '',
     responseType: 'token', // try bearer
     scope: '',
     state: randomString(32),

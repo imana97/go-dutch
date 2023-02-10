@@ -1,7 +1,7 @@
 import { Alert, Button, Form } from 'react-bootstrap';
 import { userStore } from '../store';
 import { observer } from 'mobx-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Parse from 'parse';
 
 export const LoginComponent = observer(() => {
@@ -62,11 +62,11 @@ export const LoginComponent = observer(() => {
         <Form.Group>
           <hr />
           <Form.Text>
-            Don't have an account? <a href="/sign-up">Create an account</a>
+            Don't have an account? <Link to="/sign-up">Create an account</Link>
           </Form.Text>
           <br />
           <Form.Text>
-            <a href="/password-reset">Forgot my password</a>
+            <Link to="/password-reset">Forgot my password</Link>
           </Form.Text>
         </Form.Group>
       </Form>

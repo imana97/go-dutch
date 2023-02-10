@@ -90,6 +90,7 @@ export const AccountComponent = observer(() => (
         type="email"
         disabled
       />
+      <Form.Text>You can not change your email.</Form.Text>
     </Form.Group>
   </Form>
 ));
